@@ -2,24 +2,28 @@
 <html lang="en" ng-app="app">
 <head>
   <meta charset="UTF-8">
-  <title>Interactive World Map</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
-  <!-- Leaflet + Angular Leaflet -->
-  <link rel="stylesheet" href="https://s3-us-west-2.amazonaws.com/s.cdpn.io/93930/leaflet.css">
+  <title>Interactive Map</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://s3-us-west-2.amazonaws.com/s.cdpn.io/93930/leaflet.css">
   <link rel="stylesheet" type="text/css" href="https://cloud.github.com/downloads/lafeber/world-flags-sprite/flags32.css" />
 </head>
-<body ng-controller="MapCtrl">
+<body ng-controller="GermanMapCtrl">
+  <leaflet center="center" events="events" legend="legend" defaults="defaults" geojson="geojson"></leaflet>
 
-  <!-- World Map -->
-  <leaflet center="center" defaults="defaults" geojson="geojson" style="height: 100vh;"></leaflet>
+  <!-- Country Info Box -->
+  <div class="map-box country-data f32" ng-show="selectedCountryData.en || selectedCountry">
+    <div class="col flag" ng-class="selectedCountryData.flag"></div>
+    <div class="col">
+      <span class="row">{{selectedCountryData.en.name || selectedCountry.properties.name || ''}}</span>
+      <span class="row capital" ng-show="selectedCountryData.capital">Capital: {{selectedCountryData.capital}}</span>
+      <span class="row" ng-show="selectedCountryExtra.language">🌐 Language: {{selectedCountryExtra.language}}</span>
+      <span class="row" ng-show="selectedCountryExtra.currency">💰 Currency: {{selectedCountryExtra.currency}} {{selectedCountryExtra.symbol}}</span>
+    </div>
+  </div>
 
-  <!-- Info Box -->
-  <div class="info-box" ng-show="selectedCountry.name">
-    <h2>{{selectedCountry.name}}</h2>
-    <p>🌐 Language: {{selectedCountry.language}}</p>
-    <p>💰 Currency: {{selectedCountry.currency}} {{selectedCountry.symbol}}</p>
+  <div ng-show="showCenterCoords" class="map-box coordinates">
+    center: {lat: {{center.lat | number:4}}, lng: {{center.lng | number:4}}, zoom: {{center.zoom}}}
   </div>
 
   <!-- Scripts -->
@@ -27,6 +31,5 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
   <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/93930/angular-leaflet-directive.js"></script>
   <script src="script.js"></script>
-
 </body>
 </html>
